@@ -28,7 +28,7 @@ from collections import deque
 
 # 진입차수가 0이 된 노드들을 관리하는 큐
 nodeQueue = deque()
-for i in range(len(indegree)):
+for i in range(1,N+1):
     if indegree[i] == 0:
         nodeQueue.append(i)
 
@@ -43,6 +43,5 @@ while nodeQueue:
         indegree[next] -= 1
         if indegree[next] == 0:
             nodeQueue.append(next)
-del final_order[-1]
 for order in final_order:
     print(order, end=' ')
