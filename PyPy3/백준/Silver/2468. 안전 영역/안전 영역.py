@@ -1,41 +1,42 @@
-import sys
-sys.setrecursionlimit(10**5)
-N = int(input())
-height = []
-for i in range(N):
-    height.append(list(map(int,input().split())))
-paper = [[0 for _ in range(N)] for _ in range(N)]
+n=int(input())
+ls=[list(map(int,input().split())) for _ in range(n)]
 
-# 안전 영역 찾으면 일단 cnt +1
-# 그 후 죄다 내린 비에 해당하는 숫자로 칠해버림
-
-def bfs(i,j,x):
-    global N
-    if 0<=i<N and 0<=j<N:
-        if(height[i][j]>x and paper[i][j]!=x):
-            paper[i][j]=x
-            bfs(i-1,j,x)
-            bfs(i+1,j,x)
-            bfs(i,j-1,x)
-            bfs(i,j+1,x)
+def iterative_dfs(x, y, visited, grid, threshold):
+    stack = [(x, y)]
+    n = len(grid)
     
-last = 0
-for i in range(N):
-    for j in range(N):
-        last = max(last,height[i][j])
+    while stack:
+        cx, cy = stack.pop()
+        if cx < 0 or cy < 0 or cx >= n or cy >= n or grid[cx][cy] <= threshold or visited[cx][cy]:
+            continue
+        
+        visited[cx][cy] = True
+        
+        # 상하좌우 방향으로 이동
+        stack.append((cx + 1, cy))
+        stack.append((cx - 1, cy))
+        stack.append((cx, cy + 1))
+        stack.append((cx, cy - 1))
 
-result=0
-for x in range(last+1):
-    cnt=0
-    for i in range(N):
-        for j in range(N):
-            if(height[i][j]>x and paper[i][j]!=x):
-                cnt+=1
-                bfs(i,j,x)
-    result=max(cnt,result)
+def max_connected_areas(grid):
+    n = len(grid)
+    min_value = min(map(min, grid))
+    max_value = max(map(max, grid))
+    
+    max_area_count = 0
+    
+    for threshold in range(min_value-1, max_value + 1):
+        visited = [[False] * n for _ in range(n)]
+        current_area_count = 0
+        
+        for i in range(n):
+            for j in range(n):
+                if grid[i][j] > threshold and not visited[i][j]:
+                    iterative_dfs(i, j, visited, grid, threshold)
+                    current_area_count += 1
+        
+        max_area_count = max(max_area_count, current_area_count)
+    
+    return max_area_count
 
-if result==0:
-    result=1
-
-print(result)
-
+print(max_connected_areas(ls))
