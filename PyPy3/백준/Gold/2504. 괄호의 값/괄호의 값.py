@@ -1,50 +1,44 @@
 import sys
+input = sys.stdin.readline
+brackets = list(input().strip())
+stack=[]
 
-read = sys.stdin.readline
+# 유효한 괄호열인지 확인
+for brkt in brackets:
+    if stack:
+        if stack[-1] == '(' and brkt == ')':
+            stack.pop()
+            continue
+        elif stack[-1] == '[' and brkt == ']':
+            stack.pop()
+            continue
+    stack.append(brkt)
 
-prth = list(read().strip())
-
-stack1 = []
-stack2 = []
-is_valid = True
-result = 0
-temp = 1
-
-for i in range(len(prth)):
-    if prth[i] == '(':
-        stack1.append('(')
-        temp*= 2
-    
-    elif prth[i] == '[':
-        stack2.append('[')
-        temp*= 3
-
-    elif prth[i] == ')':
-        if stack1 and stack1[-1] == '(':
-            stack1.pop()
-            if prth[i-1] == '(':
-                result += temp
-            temp //= 2
-        
-        else:
-            is_valid = False
-            break
-
-    elif prth[i] == ']':
-        if stack2 and stack2[-1] == '[':
-            stack2.pop()
-            if prth[i-1] == '[':
-                result +=temp
-            temp//=3
-
-        else:
-            is_valid = False
-            break
-
-if stack1 or stack2:
-    is_valid = False
-
-if is_valid:
-    print(result)
-else:
+if stack:
     print(0)
+else:
+    for brkt in brackets:
+        if brkt == ')':
+            if stack[-1] == '(':
+                stack.pop()
+                stack.append(2)
+            else:
+                piece = 0
+                while(stack[-1] != '('):
+                    piece += stack.pop()
+                stack.pop()
+                stack.append(2 * piece)
+        elif brkt == ']':
+            if stack[-1] == '[':
+                stack.pop()
+                stack.append(3)
+            else:
+                piece = 0
+                while(stack[-1] != '['):
+                    piece += stack.pop()
+                stack.pop()
+                stack.append(3 * piece)
+        else:
+            stack.append(brkt)
+
+    print(sum(stack))
