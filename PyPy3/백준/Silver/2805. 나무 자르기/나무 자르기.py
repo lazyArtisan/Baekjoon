@@ -1,21 +1,27 @@
 import sys
-input = sys.stdin.readline
-N, M = map(int, input().split())
-arr = list(map(int, input().split()))
-pl, pr = 0, max(arr)
-while(pl <= pr):
-    res=0
-    p = (pl+pr)//2
-    for h in arr:
-        if h-p > 0:
-            res+=(h-p)
-    if M > res:
-        pr = p-1
-    elif M < res:
-        pl = p+1
-    else:
+
+tree_nums, std_sum = map(int, sys.stdin.readline().split())
+trees = list(map(int, sys.stdin.readline().split()))
+
+start = 1
+end = max(trees)
+ans_height = (start + end) // 2
+check_sum = 0
+
+while start <= end:
+    check_sum = 0
+
+    for i in trees:
+        if i > ans_height:
+            check_sum += i - ans_height
+
+    if std_sum == check_sum:
         break
-if M > res:
-    print(p-1)
-else:
-    print(p)
+    elif std_sum > check_sum:
+        end = ans_height - 1
+    else:
+        start = ans_height + 1
+
+    ans_height = (start + end) // 2
+
+sys.stdout.write(str(ans_height))
