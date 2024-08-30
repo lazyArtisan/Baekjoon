@@ -1,27 +1,7 @@
-import copy
-import sys
-sys.setrecursionlimit(10**4)
-
 R, C = map(int, input().split())
-
-# 문자열 뜯어서 받기 힘들다
-twMap = [[0 for _ in range(C)] for _ in range(R)]
-Sx, Sy = 0, 0
-for i in range(R):
-    temp = input()
-    for j in range(C):
-        twMap[i][j] = temp[j]
-for i in range(R):
-    for j in range(C):
-        if twMap[i][j] == 'S':
-            Sx, Sy = i,j
-
-# 고슴도치 퍼뜨리고
-# 홍수 퍼뜨리기
-
+twMap = [list(input()) for _ in range(R)]
 arrived = False
 cnt = 0
-
 dx, dy = [1,-1,0,0], [0,0,1,-1]
 
 while(1):
