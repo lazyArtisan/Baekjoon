@@ -16,24 +16,22 @@ for _ in range(N-1): # 간선 받기
 
 for i in range(1,N+1):
     if IO[i]=='0' and visited[i]==False: # 탐색의 시작점
+        visited[i] = True
         stack=[i]
         in_cnt = 0
         while stack:
             e = stack.pop()
             for edge in graph[e]:
-                if visited[edge]==False:
+                if IO[edge]=='1': 
+                    in_cnt+=1
+                elif IO[edge]=='0' and visited[edge]==False: 
                     visited[edge]=True
-                    if IO[edge]=='1': 
-                        in_cnt+=1
-                    else: 
-                        stack.append(edge)
+                    stack.append(edge)
         course += in_cnt*(in_cnt-1)
 
-# 순회하다가 안이면 탐색 시작
-# 자기가 갖고 있는 간선들 확인하고 안이면 경로 개수 더하기
-
-for i in range(1,N+1):
-    if IO[i]=='1':
+    # 순회하다가 안이면 탐색 시작
+    # 자기가 갖고 있는 간선들 확인하고 안이면 경로 개수 더하기
+    elif IO[i]=='1':
         for edge in graph[i]:
             if IO[edge]=='1':
                 course+=1
